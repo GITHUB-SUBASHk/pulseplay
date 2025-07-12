@@ -8,7 +8,7 @@ const songListUI = document.getElementById("songList");
 
 let songs = [];
 let metadataMap = {};
-let currentIndex = 0;
+let currentIndex = -1;
 let isPlaying = false;
 
 function renderSongList() {
@@ -40,18 +40,21 @@ function togglePlayPause() {
 }
 
 function playNext() {
-  if (currentIndex + 1 < songs.length) {
-    loadSong(currentIndex + 1, true);
-  }
+  if (!songs.length) return;
+  const nextIndex = MoodEngine.findNextByMood(songs, metadataMap);
+  loadSong(nextIndex, true);
 }
 
 function playPrevious() {
-  if (currentIndex > 0) loadSong(currentIndex - 1, true);
+  if (currentIndex > 0) {
+    loadSong(currentIndex - 1, true);
+  }
 }
 
 function loadSong(index, autoPlay = false) {
   const file = songs[index];
   if (!file) return;
+  currentIndex = index;
 
   const reader = new FileReader();
   reader.onload = (e) => {
@@ -60,10 +63,9 @@ function loadSong(index, autoPlay = false) {
       audio.play();
       isPlaying = true;
     }
-    currentIndex = index;
     updatePlayButton();
-    currentSong.textContent = file.name;
     highlightSong(index);
+    currentSong.textContent = file.name;
   };
   reader.readAsDataURL(file);
 
@@ -72,11 +74,11 @@ function loadSong(index, autoPlay = false) {
       metadataMap[file.name] = tag.tags;
       const mood = MoodEngine.classifyMood(tag.tags, file.name);
       MoodEngine.pushMood(mood);
-      const title = tag.tags.title || file.name;
-      const artist = tag.tags.artist || "Unknown Artist";
-      currentSong.textContent = `${artist} - ${title}`;
     },
-    onError: (err) => console.warn("ID3 error:", err),
+    onError: () => {
+      const mood = MoodEngine.classifyMood({}, file.name);
+      MoodEngine.pushMood(mood);
+    }
   });
 }
 
@@ -87,21 +89,13 @@ audio.addEventListener("timeupdate", () => {
 seekBar.addEventListener("input", () => {
   audio.currentTime = seekBar.value;
 });
-audio.addEventListener("ended", () => {
-  // Use mood-based next for auto-play
-  const nextIndex = MoodEngine.matchNextSong(songs, metadataMap);
-  if (nextIndex !== null && nextIndex !== currentIndex) {
-    loadSong(nextIndex, true);
-  } else if (currentIndex + 1 < songs.length) {
-    loadSong(currentIndex + 1, true);
-  }
-});
+audio.addEventListener("ended", () => playNext());
 
 document.getElementById("playPauseBtn").addEventListener("click", togglePlayPause);
 document.getElementById("nextBtn").addEventListener("click", playNext);
 document.getElementById("prevBtn").addEventListener("click", playPrevious);
 
-// Folder popup handling
+// Folder popup logic
 document.getElementById("openFolderPopup").addEventListener("click", () => {
   document.getElementById("folderPopup").classList.add("active");
 });
@@ -112,14 +106,12 @@ document.getElementById("chooseBtn").addEventListener("click", () => {
   document.getElementById("folderInput").click();
 });
 document.getElementById("folderInput").addEventListener("change", () => {
-  const files = Array.from(document.getElementById("folderInput").files)
-    .filter(f => f.type.startsWith("audio/"));
+  const files = Array.from(document.getElementById("folderInput").files).filter(f => f.type.startsWith("audio/"));
   if (files.length > 0) {
     songs = files;
+    currentIndex = -1;
     renderSongList();
     loadSong(0, true);
     document.getElementById("folderPopup").classList.remove("active");
-  } else {
-    currentSong.textContent = "No audio files found.";
   }
 });
