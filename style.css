@@ -1,0 +1,72 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  margin: 0;
+  background: #121212;
+  color: white;
+}
+
+.app {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.controls button {
+  font-size: 1.5rem;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+}
+
+.song-list {
+  list-style: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.song-list li {
+  padding: 10px;
+  margin: 4px 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.song-list li:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.song-list li.active {
+  background-color: #1db954;
+  color: black;
+  font-weight: bold;
+}
+
+.folder-popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.folder-popup.active {
+  display: flex;
+}
+
+.popup-inner {
+  background: #222;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+}

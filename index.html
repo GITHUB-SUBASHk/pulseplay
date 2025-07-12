@@ -1,0 +1,177 @@
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PulsePlay</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: radial-gradient(circle at top left, #0f0c29, #302b63, #24243e);
+      color: white;
+    }.app {
+  max-width: 700px;
+  margin: 3rem auto;
+  padding: 2rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  font-size: 2.2rem;
+  background: linear-gradient(90deg, #00dbde, #fc00ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+header button img {
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  filter: brightness(1.2);
+}
+
+.song-display {
+  text-align: center;
+  margin: 1.5rem 0;
+  font-size: 1.2rem;
+  color: #00ffcc;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin: 1rem 0;
+}
+
+.controls button {
+  font-size: 1.5rem;
+  background: linear-gradient(135deg, #00dbde, #fc00ff);
+  border: none;
+  border-radius: 50%;
+  padding: 12px 16px;
+  color: #fff;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.controls button:hover {
+  transform: scale(1.2);
+}
+
+#seekBar {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.song-list {
+  margin-top: 1rem;
+  padding-left: 0;
+  list-style: none;
+  max-height: 160px;
+  overflow-y: auto;
+  border-top: 1px solid #444;
+  border-bottom: 1px solid #444;
+}
+
+.song-list li {
+  padding: 10px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s;
+}
+
+.song-list li:hover {
+  background-color: rgba(255, 255, 255, 0.07);
+}
+
+.song-list li.active {
+  background-color: #00dbde;
+  color: black;
+  font-weight: bold;
+}
+
+.folder-popup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 99;
+}
+
+.folder-popup.active {
+  display: flex;
+}
+
+.popup-inner {
+  background: #222;
+  padding: 2rem;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.popup-inner button {
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #fc466b, #3f5efb);
+  color: white;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <h1>PulsePlay</h1>
+      <button id="openFolderPopup" title="Choose folder again">
+        <img src="assets/folder-icon.svg" alt="Choose Folder" />
+      </button>
+    </header><main>
+  <section class="song-display">
+    <p id="currentSong">No song loaded</p>
+  </section>
+
+  <div class="controls">
+    <button id="prevBtn">⏮</button>
+    <button id="playPauseBtn">▶️</button>
+    <button id="nextBtn">⏭</button>
+  </div>
+
+  <input type="range" id="seekBar" value="0" min="0" step="1" />
+
+  <ul id="songList" class="song-list"></ul>
+</main>
+
+<input type="file" id="folderInput" webkitdirectory multiple hidden />
+
+<div class="folder-popup" id="folderPopup">
+  <div class="popup-inner">
+    <h2>Choose Music Folder</h2>
+    <button id="chooseBtn">📂 Select Folder</button>
+    <button id="closePopup">Cancel</button>
+  </div>
+</div>
+
+  </div><audio id="audio"></audio>
+
+  <script src="https://cdn.jsdelivr.net/npm/jsmediatags@3.9.7/dist/jsmediatags.min.js"></script>  <script src="script/player.js" type="module"></script></body>
+</html>
