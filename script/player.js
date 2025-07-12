@@ -40,8 +40,9 @@ function togglePlayPause() {
 }
 
 function playNext() {
-  const nextIndex = MoodEngine.matchNextSong(songs, metadataMap);
-  if (nextIndex !== null) loadSong(nextIndex, true);
+  if (currentIndex + 1 < songs.length) {
+    loadSong(currentIndex + 1, true);
+  }
 }
 
 function playPrevious() {
@@ -86,7 +87,15 @@ audio.addEventListener("timeupdate", () => {
 seekBar.addEventListener("input", () => {
   audio.currentTime = seekBar.value;
 });
-audio.addEventListener("ended", () => playNext());
+audio.addEventListener("ended", () => {
+  // Use mood-based next for auto-play
+  const nextIndex = MoodEngine.matchNextSong(songs, metadataMap);
+  if (nextIndex !== null && nextIndex !== currentIndex) {
+    loadSong(nextIndex, true);
+  } else if (currentIndex + 1 < songs.length) {
+    loadSong(currentIndex + 1, true);
+  }
+});
 
 document.getElementById("playPauseBtn").addEventListener("click", togglePlayPause);
 document.getElementById("nextBtn").addEventListener("click", playNext);
