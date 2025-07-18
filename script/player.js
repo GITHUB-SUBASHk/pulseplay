@@ -39,10 +39,17 @@ function togglePlayPause() {
   updatePlayButton();
 }
 
-function playNext() {
+function playNext(manual = false) {
   if (!songs.length) return;
-  const nextIndex = MoodEngine.findNextByMood(songs, metadataMap);
-  loadSong(nextIndex, true);
+  if (manual) {
+    // Sequential next
+    let nextIndex = (currentIndex + 1) % songs.length;
+    loadSong(nextIndex, true);
+  } else {
+    // Mood engine pick
+    const nextIndex = MoodEngine.findNextByMood(songs, metadataMap);
+    loadSong(nextIndex, true);
+  }
 }
 
 function playPrevious() {
@@ -89,10 +96,10 @@ audio.addEventListener("timeupdate", () => {
 seekBar.addEventListener("input", () => {
   audio.currentTime = seekBar.value;
 });
-audio.addEventListener("ended", () => playNext());
+audio.addEventListener("ended", () => playNext(false));
 
 document.getElementById("playPauseBtn").addEventListener("click", togglePlayPause);
-document.getElementById("nextBtn").addEventListener("click", playNext);
+document.getElementById("nextBtn").addEventListener("click", () => playNext(true));
 document.getElementById("prevBtn").addEventListener("click", playPrevious);
 
 // Folder popup logic
