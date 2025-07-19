@@ -1,6 +1,6 @@
 🎵 Mood-Based Smart Music Player (Offline & AI-enhanced)
 
-A powerful, elegant offline music player built for the web with support for smart mood-based shuffling, AI playlist prediction, and offline access via Progressive Web App (PWA). It supports folder upload, drag-and-drop, and plays audio in a smooth, responsive UI.(ai- mood engine needs intial train).,
+A powerful, elegant offline music player built for the web with support for smart mood-based shuffling, AI playlist prediction, and offline access via Progressive Web App (PWA). It supports folder upload, drag-and-drop, and plays audio in a smooth, responsive UI.(AI - mood engine needs preliminary training).,
 
 
 ---
